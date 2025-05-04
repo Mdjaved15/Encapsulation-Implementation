@@ -1,0 +1,90 @@
+import java.util.*;
+class BankAccount {
+    private String name;
+    private String accountNumber;
+    private double balance;
+
+    public BankAccount(String name, String accountNumber, double balance) {
+        this.name = name;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+    }
+
+    public String getAccountNumber() {
+        return accountNumber;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount > 0) {
+            balance += amount;
+            System.out.println("Deposited ₹" + amount);
+        } else {
+            System.out.println("Invalid deposit amount.");
+        }
+    }
+
+    public void withdraw(double amount) {
+        if (amount > 0 && balance >= amount) {
+            balance -= amount;
+            System.out.println("Withdrew ₹" + amount);
+        } else {
+            System.out.println("Invalid or insufficient balance.");
+        }
+    }
+
+    public void showDetails() {
+        System.out.println("Name: " + name);
+        System.out.println("Account Number: " + accountNumber);
+        System.out.println("Balance: ₹" + balance);
+    }
+}
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        List<BankAccount> accounts = new ArrayList<>();
+        accounts.add(new BankAccount("Md Javed", "12345", 1000));
+        accounts.add(new BankAccount("Anjali", "67890", 1500));
+        accounts.add(new BankAccount("Ravi", "11111", 2000));
+
+        System.out.print("Enter your account number: ");
+        String inputAcc = sc.nextLine();
+
+        BankAccount loggedInAccount = null;
+
+        // Verify account number
+        for (BankAccount acc : accounts) {
+            if (acc.getAccountNumber().equals(inputAcc)) {
+                loggedInAccount = acc;
+                break;
+            }
+        }
+
+        if (loggedInAccount != null) {
+            System.out.println("Welcome, " + loggedInAccount.getName());
+            loggedInAccount.showDetails();
+
+            System.out.print("Enter deposit amount: ");
+            double dep = sc.nextDouble();
+            loggedInAccount.deposit(dep);
+
+            System.out.print("Enter withdrawal amount: ");
+            double with = sc.nextDouble();
+            loggedInAccount.withdraw(with);
+
+            System.out.println("Updated Balance: ₹" + loggedInAccount.getBalance());
+        } else {
+            System.out.println("❌ Account number not found.");
+        }
+
+        sc.close();
+    }
+}
