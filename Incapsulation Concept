@@ -1,18 +1,24 @@
-import java.util.*;
-
 class BankAccount {
     private String name;
     private String accountNumber;
+    private String username;
+    private String password;
     private double balance;
 
-    public BankAccount(String name, String accountNumber, double balance) {
+    public BankAccount(String name, String accountNumber, String username, String password, double balance) {
         this.name = name;
         this.accountNumber = accountNumber;
+        this.username = username;
+        this.password = password;
         this.balance = balance;
     }
 
-    public String getAccountNumber() {
-        return accountNumber;
+    public String getUsername() {
+        return username;
+    }
+
+    public boolean verifyLogin(String inputPassword) {
+        return this.password.equals(inputPassword);
     }
 
     public String getName() {
@@ -47,35 +53,39 @@ class BankAccount {
         System.out.println("💰 Balance: ₹" + balance);
     }
 }
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        // Create and store multiple accounts
+        // Add 6 sample users
         List<BankAccount> accounts = new ArrayList<>();
-        accounts.add(new BankAccount("Md Javed", "12345", 1000));
-        accounts.add(new BankAccount("Anjali Sharma", "67890", 1500));
-        accounts.add(new BankAccount("Ravi Kumar", "11111", 2000));
-        accounts.add(new BankAccount("Neha Singh", "54321", 3000));
-        accounts.add(new BankAccount("Aman Verma", "99999", 2500));
+        accounts.add(new BankAccount("Md Javed", "12345", "javed", "pass123", 1000));
+        accounts.add(new BankAccount("Anjali Sharma", "67890", "anjali", "pass456", 1500));
+        accounts.add(new BankAccount("Ravi Kumar", "11111", "ravi", "pass789", 2000));
+        accounts.add(new BankAccount("Neha Singh", "54321", "neha", "pass321", 2500));
+        accounts.add(new BankAccount("Aman Verma", "99999", "aman", "pass999", 3000));
+        accounts.add(new BankAccount("Priya Das", "88888", "priya", "pass888", 3500));
 
-        System.out.print("🔑 Enter your account number: ");
-        String inputAcc = sc.nextLine();
+        System.out.print("👤 Enter username: ");
+        String username = sc.nextLine();
+
+        System.out.print("🔒 Enter password: ");
+        String password = sc.nextLine();
 
         BankAccount loggedInAccount = null;
 
-        // Verify account
+        // Authenticate
         for (BankAccount acc : accounts) {
-            if (acc.getAccountNumber().equals(inputAcc)) {
+            if (acc.getUsername().equals(username) && acc.verifyLogin(password)) {
                 loggedInAccount = acc;
                 break;
             }
         }
 
         if (loggedInAccount != null) {
-            System.out.println("\n✅ Access Granted!");
-            System.out.println("Welcome, " + loggedInAccount.getName() + " 👋");
+            System.out.println("\n✅ Login successful! Welcome, " + loggedInAccount.getName());
             loggedInAccount.showDetails();
 
             System.out.print("\n💵 Enter deposit amount: ");
@@ -88,7 +98,7 @@ public class Main {
 
             System.out.println("📊 Updated Balance: ₹" + loggedInAccount.getBalance());
         } else {
-            System.out.println("\n❌ Account number not found. Access denied.");
+            System.out.println("\n❌ Login failed. Invalid username or password.");
         }
 
         sc.close();
